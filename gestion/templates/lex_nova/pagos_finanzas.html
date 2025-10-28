@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos y Finanzas - Lex Nova</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            color: #28a745;
+            font-weight: 700;
+            font-size: 2rem;
+            margin: 0;
+        }
+        
+        .btn-volver {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-volver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.4);
+            color: white;
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 0;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .filters-section {
+            background: white;
+            padding: 2rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .table-section {
+            padding: 2rem;
+            background: white;
+        }
+        
+        .payments-table {
+            width: 100%;
+        }
+        
+        .payments-table th {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            text-align: center;
+            border: none;
+        }
+        
+        .payments-table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .payments-table tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .payments-table tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.01);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .payment-status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-pagado {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pendiente {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-vencido {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn-export {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(23, 162, 184, 0.4);
+            color: white;
+        }
+        
+        .add-payment-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .add-payment-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.5);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .text-success-custom {
+            color: #28a745;
+        }
+        
+        .text-warning-custom {
+            color: #ffc107;
+        }
+        
+        .text-danger-custom {
+            color: #dc3545;
+        }
+        
+        .text-info-custom {
+            color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-dollar-sign me-3"></i>Pagos y Finanzas</h1>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="{% url 'dashboard' %}" class="btn btn-volver">
+                        <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Tarjetas de Resumen con datos reales -->
+        <div class="summary-cards">
+            <div class="stat-card">
+                <div class="stat-icon text-success-custom">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="stat-number text-success-custom">${{ total_cobrado|floatformat:0|default:0 }}</div>
+                <div class="stat-label">Total Cobrado</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon text-warning-custom">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-number text-warning-custom">${{ total_por_cobrar|floatformat:0|default:0 }}</div>
+                <div class="stat-label">Por Cobrar</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon text-danger-custom">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-number text-danger-custom">{{ pagos_vencidos|default:0 }}</div>
+                <div class="stat-label">Pagos Vencidos</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon text-info-custom">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-number text-info-custom">{{ pagos_este_mes|default:0 }}</div>
+                <div class="stat-label">Pagos Este Mes</div>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <!-- Sección de Filtros -->
+            <div class="filters-section">
+                <form method="GET" action="{% url 'pagos_finanzas' %}">
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Buscar Cliente:</label>
+                            <input type="text" class="form-control" name="search" value="{{ search|default:'' }}" placeholder="NUREJ, Cédula o Nombre...">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label fw-bold">Estado:</label>
+                            <select class="form-select" name="estado">
+                                <option value="">Todos</option>
+                                <option value="pagado" {% if estado_filtro == 'pagado' %}selected{% endif %}>Pagados</option>
+                                <option value="pendiente" {% if estado_filtro == 'pendiente' %}selected{% endif %}>Pendientes</option>
+                                <option value="vencido" {% if estado_filtro == 'vencido' %}selected{% endif %}>Vencidos</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label fw-bold">Desde:</label>
+                            <input type="date" class="form-control" name="fecha_desde" value="{{ fecha_desde|default:'' }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label fw-bold">Hasta:</label>
+                            <input type="date" class="form-control" name="fecha_hasta" value="{{ fecha_hasta|default:'' }}">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="btn-group w-100">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter me-2"></i>Filtrar
+                                </button>
+                                <button type="button" class="btn btn-export" data-bs-toggle="modal" data-bs-target="#modalExportarReporte">
+                                    <i class="fas fa-download me-2"></i>Exportar PDF      
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabla de Pagos -->
+            <div class="table-section">
+                <h3 class="mb-4">Registro de Pagos</h3>
+                
+                <div class="table-responsive">
+                    <table class="table payments-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>NUREJ</th>
+                                <th>Cliente</th>
+                                <th>Concepto</th>
+                                <th>Monto</th>
+                                <th>Método</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pago in pagos %}
+                            <tr>
+                                <td>{{ pago.fecha|date:"d/m/Y" }}</td>
+                                <td><strong>{{ pago.cliente.nurej }}</strong></td>
+                                <td>{{ pago.cliente.nombre }}</td>
+                                <td>{{ pago.concepto|default:"Pago de honorarios" }}</td>
+                                <td class="text-end"><strong>${{ pago.monto|floatformat:2 }}</strong></td>
+                                <td>{{ pago.metodo_pago|default:"Efectivo" }}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-info me-1" onclick="verRecibo({{ pago.id }})">
+                                        <i class="fas fa-receipt"></i> Recibo
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning me-1" onclick="editarPago({{ pago.id }}, '{{ pago.concepto|escapejs }}', '{{ pago.monto }}', '{{ pago.fecha|date:'Y-m-d' }}', '{{ pago.metodo_pago|default:'efectivo' }}')">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <form method="POST" action="{% url 'eliminar_pago' pago.id %}" style="display: inline;" 
+                                          onsubmit="return confirm('¿Está seguro de eliminar este pago?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    <div class="alert alert-info mb-0">
+                                        <i class="fas fa-info-circle me-2"></i>No hay pagos registrados. ¡Registre el primer pago!
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Resumen por Cliente -->
+        <div class="main-container mt-4">
+            <div class="section-header">
+                <h3><i class="fas fa-chart-pie me-2"></i>Resumen por Cliente</h3>
+            </div>
+            <div class="table-section">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>NUREJ</th>
+                                <th class="text-end">Total Pactado</th>
+                                <th class="text-end">Total Pagado</th>
+                                <th class="text-end">Saldo Pendiente</th>
+                                <th class="text-center">% Pagado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cliente in clientes_resumen %}
+                            <tr>
+                                <td>{{ cliente.nombre }}</td>
+                                <td>{{ cliente.nurej }}</td>
+                                <td class="text-end">${{ cliente.honorarios_pactados|floatformat:2 }}</td>
+                                <td class="text-end text-success">${{ cliente.total_pagado|floatformat:2 }}</td>
+                                <td class="text-end {% if cliente.saldo_adeudado > 0 %}text-warning{% else %}text-success{% endif %}">
+                                    ${{ cliente.saldo_adeudado|floatformat:2 }}
+                                </td>
+                                <td class="text-center">
+                                    {% with porcentaje=cliente.porcentaje_pagado %}
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar {% if porcentaje >= 75 %}bg-success{% elif porcentaje >= 50 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             role="progressbar" style="width: {{ porcentaje }}%">{{ porcentaje|floatformat:0 }}%</div>
+                                    </div>
+                                    {% endwith %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <div class="alert alert-info mb-0">
+                                        <i class="fas fa-info-circle me-2"></i>No hay clientes registrados.
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Flotante para Agregar Pago -->
+    <button class="add-payment-btn" data-bs-toggle="modal" data-bs-target="#modalRegistrarPago">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Modal para Registrar Pago -->
+    <div class="modal fade" id="modalRegistrarPago" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-dollar-sign me-2"></i>Registrar Nuevo Pago</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNuevoPago" method="POST" action="{% url 'crear_pago' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">NUREJ del Cliente</label>
+                                <input type="text" class="form-control" name="cliente_nurej" required placeholder="Ej: 12345">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Fecha de Pago</label>
+                                <input type="date" class="form-control" name="fecha" required value="{{ hoy|date:'Y-m-d' }}">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Concepto del Pago</label>
+                            <input type="text" class="form-control" name="concepto" placeholder="Ej: Primera cuota, Anticipo, etc." required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Monto</label>
+                                <input type="number" class="form-control" name="monto" step="0.01" required placeholder="0.00">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Método de Pago</label>
+                                <select class="form-select" name="metodo_pago">
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="transferencia">Transferencia</option>
+                                    <option value="cheque">Cheque</option>
+                                    <option value="tarjeta">Tarjeta</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Observaciones</label>
+                            <textarea class="form-control" name="observaciones" rows="2" placeholder="Información adicional (opcional)"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-save me-2"></i>Registrar Pago
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Pago -->
+    <div class="modal fade" id="modalEditarPago" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Editar Pago</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarPago" method="POST" action="{% url 'editar_pago' 0 %}">
+                        {% csrf_token %}
+                        <input type="hidden" id="editPagoId" name="pago_id" value="">
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Fecha de Pago</label>
+                                <input type="date" class="form-control" id="editFechaPago" name="fecha" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Monto</label>
+                                <input type="number" class="form-control" id="editMonto" name="monto" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Concepto del Pago</label>
+                            <input type="text" class="form-control" id="editConcepto" name="concepto" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Método de Pago</label>
+                            <select class="form-select" id="editMetodo" name="metodo_pago">
+                                <option value="efectivo">Efectivo</option>
+                                <option value="transferencia">Transferencia</option>
+                                <option value="cheque">Cheque</option>
+                                <option value="tarjeta">Tarjeta</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-warning w-100">
+                            <i class="fas fa-save me-2"></i>Guardar Cambios
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function verRecibo(pagoId) {
+    // Abrir recibo en nueva ventana
+    window.open('/generar-recibo/' + pagoId + '/', '_blank');
+}
+        
+        function editarPago(id, concepto, monto, fecha, metodo) {
+            // Actualizar la acción del formulario con el ID correcto
+            document.getElementById('formEditarPago').action = '/editar-pago/' + id + '/';
+            
+            // Cargar los datos
+            document.getElementById('editPagoId').value = id;
+            document.getElementById('editConcepto').value = concepto;
+            document.getElementById('editMonto').value = monto;
+            document.getElementById('editFechaPago').value = fecha;
+            document.getElementById('editMetodo').value = metodo;
+            
+            // Mostrar modal
+            var modal = new bootstrap.Modal(document.getElementById('modalEditarPago'));
+            modal.show();
+        }
+        
+        // Función para formatear números como moneda
+        function formatearMoneda(numero) {
+            return new Intl.NumberFormat('es-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(numero);
+        }
+    </script>
+    <!-- Modal para Exportar Reporte -->
+<div class="modal fade" id="modalExportarReporte" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white;">
+                <h5 class="modal-title"><i class="fas fa-file-pdf me-2"></i>Exportar Reporte de Pagos</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formExportarReporte" method="GET" action="{% url 'exportar_pagos_pdf' %}">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">NUREJ o Cédula del Cliente:</label>
+                        <input type="text" class="form-control" name="nurej_filtro" 
+                               placeholder="Ingrese NUREJ o CI específico" required>
+                        <div class="form-text">Ingrese el documento del cliente para generar su reporte individual</div>
+                    </div>
+                    
+                    <!-- Campos ocultos para mantener filtros actuales -->
+                    <input type="hidden" name="search" value="{{ search|default:'' }}">
+                    <input type="hidden" name="fecha_desde" value="{{ fecha_desde|default:'' }}">
+                    <input type="hidden" name="fecha_hasta" value="{{ fecha_hasta|default:'' }}">
+                    
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fas fa-download me-2"></i>Generar Reporte PDF
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

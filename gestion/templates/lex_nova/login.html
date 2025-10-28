@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lex Nova - Sistema de Gestión Jurídica</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h1 {
+            color: #1e3c72;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: #495057;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .legal-icon {
+            font-size: 4rem;
+            color: #1e3c72;
+            margin-bottom: 1rem;
+        }
+        
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 0.2rem rgba(30, 60, 114, 0.25);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 60, 114, 0.3);
+            background: linear-gradient(135deg, #1a3566 0%, #245089 100%);
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-text {
+            text-align: center;
+            margin-top: 2rem;
+            color: #495057;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .form-label {
+            color: #495057;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-balance-scale legal-icon"></i>
+                <h1>Lex Nova</h1>
+                <p>Sistema de Gestión Jurídica</p>
+            </div>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
+                    <label for="username"><i class="fas fa-user me-2"></i>Usuario</label>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                    <label for="password"><i class="fas fa-lock me-2"></i>Contraseña</label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-login">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    Iniciar Sesión
+                </button>
+            </form>
+            
+            <div class="footer-text">
+                <small>© 2024 Firma Jurídica Lex Nova<br>
+                Sistema de Gestión Profesional</small>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

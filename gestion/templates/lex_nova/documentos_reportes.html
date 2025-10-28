@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentos y Reportes - Lex Nova</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            color: #1e3c72;
+            font-weight: 700;
+            font-size: 2rem;
+            margin: 0;
+        }
+        
+        .btn-volver {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-volver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.4);
+            color: white;
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 0;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .section-tabs {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1rem 2rem;
+            border-bottom: 3px solid #2a5298;
+        }
+        
+        .nav-tabs {
+            border: none;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #495057;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            padding: 0.8rem 1.5rem;
+            margin-right: 0.5rem;
+            border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            background: rgba(42, 82, 152, 0.1);
+            color: #2a5298;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: #2a5298;
+            color: white;
+        }
+        
+        .upload-section {
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .upload-area {
+            border: 3px dashed #2a5298;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            background: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            background: #f0f7ff;
+            border-color: #1e3c72;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #2a5298;
+            margin-bottom: 1rem;
+        }
+        
+        .documents-section {
+            padding: 2rem;
+            background: white;
+        }
+        
+        .document-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .document-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .document-icon {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+        
+        .doc-pdf { color: #dc3545; }
+        .doc-word { color: #2a5298; }
+        .doc-excel { color: #28a745; }
+        .doc-image { color: #ffc107; }
+        
+        .reports-section {
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+            border: 2px solid transparent;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #2a5298;
+        }
+        
+        .report-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .report-title {
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+        }
+        
+        .report-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .filters-section {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .document-table th {
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-weight: 600;
+        }
+        
+        .document-table td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        
+        .document-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .badge-tipo {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .tipo-contrato {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .tipo-poder {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .tipo-resolucion {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .tipo-escrito {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .add-doc-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .add-doc-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-folder-open me-3"></i>Documentos y Reportes</h1>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="{% url 'dashboard' %}" class="btn btn-volver">
+                        <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-container">
+            <!-- Tabs de Navegación -->
+            <div class="section-tabs">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="documentos-tab" data-bs-toggle="tab" data-bs-target="#documentos" type="button">
+                            <i class="fas fa-file-alt me-2"></i>Documentos
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="reportes-tab" data-bs-toggle="tab" data-bs-target="#reportes" type="button">
+                            <i class="fas fa-chart-bar me-2"></i>Reportes
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contenido de los Tabs -->
+            <div class="tab-content" id="myTabContent">
+                <!-- Tab de Documentos -->
+                <div class="tab-pane fade show active" id="documentos" role="tabpanel">
+                    <!-- Sección de Carga -->
+                    <div class="upload-section">
+                        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h4>Arrastra y suelta archivos aquí</h4>
+                            <p class="text-muted">o haz clic para seleccionar</p>
+                            <p class="small text-muted">Formatos permitidos: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG</p>
+                            <input type="file" id="fileInput" style="display: none;" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png">
+                        </div>
+                    </div>
+
+                    <!-- Filtros -->
+                    <div class="filters-section">
+                        <div class="row align-items-end">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Buscar documento:</label>
+                                <input type="text" class="form-control" id="searchDoc" placeholder="Nombre del archivo...">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Cliente:</label>
+                                <input type="text" class="form-control" id="searchCliente" placeholder="NUREJ o nombre...">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Tipo:</label>
+                                <select class="form-select" id="tipoFiltro">
+                                    <option>Todos</option>
+                                    <option>Contratos</option>
+                                    <option>Poderes</option>
+                                    <option>Resoluciones</option>
+                                    <option>Escritos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Fecha:</label>
+                                <input type="date" class="form-control" id="fechaFiltro">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary w-100" onclick="buscarDocumentos()">
+                                    <i class="fas fa-search me-2"></i>Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Documentos -->
+                    <div class="documents-section">
+                        <h4 class="mb-4">Documentos Recientes</h4>
+                        
+                        <div class="table-responsive">
+                            <table class="table document-table">
+                                <thead>
+                                    <tr>
+                                        <th>Documento</th>
+                                        <th>Tipo</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha</th>
+                                        <th>Tamaño</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for documento in documentos %}
+                                    <tr>
+                                        <td>
+                                            {% if documento.nombre|lower|slice:"-4:" == '.pdf' %}
+                                                <i class="fas fa-file-pdf doc-pdf"></i>
+                                            {% elif '.doc' in documento.nombre.lower or '.docx' in documento.nombre.lower %}
+                                                <i class="fas fa-file-word doc-word"></i>
+                                            {% elif '.xls' in documento.nombre.lower or '.xlsx' in documento.nombre.lower %}
+                                                <i class="fas fa-file-excel doc-excel"></i>
+                                            {% else %}
+                                                <i class="fas fa-file-image doc-image"></i>
+                                            {% endif %}
+                                            <strong>{{ documento.nombre }}</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge-tipo tipo-{{ documento.tipo }}">
+                                                {{ documento.get_tipo_display }}
+                                            </span>
+                                        </td>
+                                        <td>{{ documento.cliente.nombre|default:"Sin cliente" }} {% if documento.cliente %}({{ documento.cliente.nurej }}){% endif %}</td>
+                                        <td>{{ documento.fecha_subida|date:"d/m/Y" }}</td>
+                                        <td>
+                                            {% if documento.tamaño %}
+                                                {{ documento.tamaño|filesizeformat }}
+                                            {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="window.open('{% url 'ver_documento' documento.id %}', '_blank')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success me-1" onclick="window.location.href='{% url 'descargar_documento' documento.id %}'">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarDocumento({{ documento.id }})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">
+                                            <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                                            <p class="text-muted">No hay documentos disponibles</p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab de Reportes -->
+                <div class="tab-pane fade" id="reportes" role="tabpanel">
+                    <div class="reports-section">
+                        <h4 class="mb-4 text-center">Generar Reportes</h4>
+                        
+                        <div class="row g-4">
+                            <!-- Reporte de Casos -->
+                            <div class="col-md-4">
+                                <div class="report-card" onclick="window.location.href='{% url 'generar_reporte_casos' %}'">
+                                    <div class="report-icon text-primary">
+                                        <i class="fas fa-briefcase"></i>
+                                    </div>
+                                    <h5 class="report-title">Reporte de Casos Judiciales</h5>
+                                    <p class="report-description">
+                                        Exporta toda la información de los casos activos, concluidos y abandonados
+                                    </p>
+                                    <button class="btn btn-outline-primary mt-3">
+                                        <i class="fas fa-download me-2"></i>Generar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Reporte de Pagos -->
+                            <div class="col-md-4">
+                                <div class="report-card" onclick="window.location.href='{% url 'exportar_pagos_pdf' %}'">
+                                    <div class="report-icon text-success">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <h5 class="report-title">Reporte de Pagos</h5>
+                                    <p class="report-description">
+                                        Estado financiero de todos los clientes, pagos recibidos y pendientes
+                                    </p>
+                                    <button class="btn btn-outline-success mt-3">
+                                        <i class="fas fa-download me-2"></i>Generar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Reporte de Audiencias -->
+                            <div class="col-md-4">
+                                <div class="report-card" onclick="window.location.href='{% url 'generar_reporte_audiencias' %}'">
+                                    <div class="report-icon text-warning">
+                                        <i class="fas fa-gavel"></i>
+                                    </div>
+                                    <h5 class="report-title">Calendario de Audiencias</h5>
+                                    <p class="report-description">
+                                        Listado completo de audiencias programadas y realizadas
+                                    </p>
+                                    <button class="btn btn-outline-warning mt-3">
+                                        <i class="fas fa-download me-2"></i>Generar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Reporte de Expedientes -->
+                            <div class="col-md-4">
+                                <div class="report-card" onclick="window.location.href='{% url 'generar_reporte_expedientes' %}'">
+                                    <div class="report-icon text-info">
+                                        <i class="fas fa-folder"></i>
+                                    </div>
+                                    <h5 class="report-title">Revisión de Expedientes</h5>
+                                    <p class="report-description">
+                                        Lista de expedientes que requieren revisión en juzgados
+                                    </p>
+                                    <button class="btn btn-outline-info mt-3">
+                                        <i class="fas fa-download me-2"></i>Generar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Reporte Mensual -->
+                            <div class="col-md-4">
+                                <div class="report-card" onclick="window.location.href='{% url 'generar_reporte_mensual' %}'">
+                                    <div class="report-icon text-danger">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <h5 class="report-title">Informe Mensual</h5>
+                                    <p class="report-description">
+                                        Resumen completo de actividades del mes: casos, pagos, audiencias
+                                    </p>
+                                    <button class="btn btn-outline-danger mt-3">
+                                        <i class="fas fa-download me-2"></i>Generar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Reporte Personalizado -->
+                            <div class="col-md-4">
+                                <div class="report-card" onclick="reportePersonalizado()">
+                                    <div class="report-icon text-secondary">
+                                        <i class="fas fa-cog"></i>
+                                    </div>
+                                    <h5 class="report-title">Reporte Personalizado</h5>
+                                    <p class="report-description">
+                                        Configura y genera un reporte según tus necesidades específicas
+                                    </p>
+                                    <button class="btn btn-outline-secondary mt-3">
+                                        <i class="fas fa-cog me-2"></i>Configurar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sección de Reportes Generados -->
+                        <div class="mt-5">
+                            <h4 class="mb-3">Reportes Recientes</h4>
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">
+                                                <i class="fas fa-file-pdf text-danger me-2"></i>
+                                                Reporte_Mensual_Diciembre_2024.pdf
+                                            </h6>
+                                            <small class="text-muted">Generado el 26/12/2024 - 10:30 AM</small>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-2">
+                                                <i class="fas fa-eye"></i> Ver
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="fas fa-download"></i> Descargar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">
+                                                <i class="fas fa-file-excel text-success me-2"></i>
+                                                Pagos_Pendientes_Q4_2024.xlsx
+                                            </h6>
+                                            <small class="text-muted">Generado el 25/12/2024 - 02:15 PM</small>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-2">
+                                                <i class="fas fa-eye"></i> Ver
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="fas fa-download"></i> Descargar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Flotante para Subir Documento -->
+    <button class="add-doc-btn" data-bs-toggle="modal" data-bs-target="#modalSubirDocumento">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Modal para Subir Documento -->
+    <div class="modal fade" id="modalSubirDocumento" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-upload me-2"></i>Subir Nuevo Documento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formSubirDocumento" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Seleccionar Archivo</label>
+                            <input type="file" class="form-control" name="archivo" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tipo de Documento</label>
+                            <select class="form-select" name="tipo" required>
+                                <option value="">Seleccione...</option>
+                                <option value="contrato">Contrato</option>
+                                <option value="poder">Poder</option>
+                                <option value="resolucion">Resolución</option>
+                                <option value="escrito">Escrito</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Asociar a Cliente (Opcional)</label>
+                            <input type="text" class="form-control" name="cliente_id" placeholder="NUREJ o Cédula del cliente">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Descripción</label>
+                            <textarea class="form-control" name="descripcion" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="subirDocumento()">
+                        <i class="fas fa-upload me-2"></i>Subir Documento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Obtener token CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Manejo de arrastrar y soltar archivos
+        document.querySelector('.upload-area').addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.background = '#e7f3ff';
+        });
+        
+        document.querySelector('.upload-area').addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.background = 'white';
+        });
+        
+        document.querySelector('.upload-area').addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.background = 'white';
+            var files = e.dataTransfer.files;
+            document.getElementById('fileInput').files = files;
+            // Abrir modal automáticamente
+            var modal = new bootstrap.Modal(document.getElementById('modalSubirDocumento'));
+            modal.show();
+        });
+        
+        // Función de búsqueda
+        function buscarDocumentos() {
+            const search = document.getElementById('searchDoc').value;
+            const cliente = document.getElementById('searchCliente').value;
+            const tipo = document.getElementById('tipoFiltro').value;
+            const fecha = document.getElementById('fechaFiltro').value;
+            
+            const params = new URLSearchParams();
+            if (search) params.append('search', search);
+            if (cliente) params.append('cliente_search', cliente);
+            if (tipo && tipo !== 'Todos') params.append('tipo', tipo);
+            if (fecha) params.append('fecha', fecha);
+            
+            window.location.href = `{% url 'documentos_reportes' %}?${params.toString()}`;
+        }
+        
+        // Función para eliminar documento
+        function eliminarDocumento(id) {
+            if (confirm('¿Está seguro de eliminar este documento?')) {
+                fetch(`/eliminar-documento/${id}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar documento');
+                    }
+                })
+                .catch(error => {
+                console.error('Error:', error);
+                alert('Error al subir documento');
+            });
+        }
+        
+        // Función para reporte personalizado
+        function reportePersonalizado() {
+            alert('Funcionalidad de reporte personalizado próximamente');
+        }
+        
+        // Manejo del input de archivo
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            var files = e.target.files;
+            if (files.length > 0) {
+                // Abrir modal automáticamente cuando se seleccionen archivos
+                var modal = new bootstrap.Modal(document.getElementById('modalSubirDocumento'));
+                modal.show();
+                
+                // Pre-llenar el archivo en el modal
+                var modalFileInput = document.querySelector('#modalSubirDocumento input[name="archivo"]');
+                modalFileInput.files = files;
+            }
+        });
+
+        // Permitir enter en el campo de búsqueda
+        document.getElementById('searchDoc').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                buscarDocumentos();
+            }
+        });
+
+        document.getElementById('searchCliente').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                buscarDocumentos();
+            }
+        });
+    </script>
+</body>
+</html>error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar documento');
+                });
+            }
+        }
+        
+        // Función para subir documento
+        function subirDocumento() {
+            const form = document.getElementById('formSubirDocumento');
+            const formData = new FormData(form);
+            
+            fetch('{% url "subir_documento" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('modalSubirDocumento'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Error al subir documento');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al subir documento');
+            });
+        }
+        
+        // Función para reporte personalizado
+        function reportePersonalizado() {
+            alert('Funcionalidad de reporte personalizado próximamente');
+        }
+        
+        // Manejo del input de archivo
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            var files = e.target.files;
+            if (files.length > 0) {
+                // Abrir modal automáticamente cuando se seleccionen archivos
+                var modal = new bootstrap.Modal(document.getElementById('modalSubirDocumento'));
+                modal.show();
+                
+                // Pre-llenar el archivo en el modal
+                var modalFileInput = document.querySelector('#modalSubirDocumento input[name="archivo"]');
+                modalFileInput.files = files;
+            }
+        });
+
+        // Permitir enter en el campo de búsqueda
+        document.getElementById('searchDoc').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                buscarDocumentos();
+            }
+        });
+
+        document.getElementById('searchCliente').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                buscarDocumentos();
+            }
+        });
+    </script>
+</body>
+</html>

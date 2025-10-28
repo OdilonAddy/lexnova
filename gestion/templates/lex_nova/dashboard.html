@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Lex Nova</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .btn-add-client, .btn-config, .btn-users, .btn-calendar {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin: 0 0.2rem;
+        }
+        
+        .btn-config {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+        
+        .btn-users {
+            background: linear-gradient(135deg, #6f42c1 0%, #6610f2 100%);
+        }
+        
+        .btn-calendar {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        }
+        
+        .btn-add-client:hover, .btn-config:hover, .btn-users:hover, .btn-calendar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+            color: white;
+        }
+        
+        .management-panel {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .management-btn {
+            border: none;
+            border-radius: 15px;
+            color: white;
+            padding: 1.8rem;
+            margin: 0.7rem;
+            min-height: 140px;
+            width: calc(25% - 1.4rem);
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .management-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .management-btn:hover::before {
+            left: 100%;
+        }
+        
+        .management-btn:nth-child(1) {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .management-btn:nth-child(2) {
+            background: linear-gradient(135deg, #fd7e14 0%, #ffc107 100%);
+            box-shadow: 0 5px 15px rgba(253, 126, 20, 0.3);
+        }
+        
+        .management-btn:nth-child(3) {
+            background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .management-btn:nth-child(4) {
+            background: linear-gradient(135deg, #6f42c1 0%, #6610f2 100%);
+            box-shadow: 0 5px 15px rgba(111, 66, 193, 0.3);
+        }
+        
+        .management-btn:hover {
+            transform: translateY(-8px) scale(1.02);
+            color: white;
+        }
+        
+        .management-btn i {
+            font-size: 3rem;
+            margin-bottom: 0.8rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        .management-btn span {
+            font-weight: 700;
+            text-align: center;
+            font-size: 1rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .widgets-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+            margin: 2rem 0;
+        }
+        
+        @media (max-width: 1200px) {
+            .widgets-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .widgets-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .widget {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .widget:nth-child(1) { border-top: 5px solid #28a745; }
+        .widget:nth-child(2) { border-top: 5px solid #fd7e14; }
+        .widget:nth-child(3) { border-top: 5px solid #17a2b8; }
+        .widget:nth-child(4) { border-top: 5px solid #dc3545; }
+        
+        .widget-header {
+            color: white;
+            padding: 1rem;
+            font-weight: 700;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .widget:nth-child(1) .widget-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        .widget:nth-child(2) .widget-header {
+            background: linear-gradient(135deg, #fd7e14 0%, #ffc107 100%);
+        }
+        .widget:nth-child(3) .widget-header {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+        }
+        .widget:nth-child(4) .widget-header {
+            background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+        }
+        
+        .widget-content {
+            padding: 1.2rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .widget-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            border-left: 5px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .widget-item:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .widget-item.overdue {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        .widget-item.tarea {
+            border-left-color: #28a745;
+        }
+        
+        .widget-item.audiencia {
+            border-left-color: #ffc107;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        
+        .calendar-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            margin: 2rem 0;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background: #e9ecef;
+            border-radius: 10px;
+            padding: 2px;
+        }
+        
+        .calendar-day-header {
+            background: #495057;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .calendar-day {
+            background: white;
+            min-height: 80px;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .calendar-day:hover {
+            background: #e7f3ff;
+            transform: scale(1.02);
+        }
+        
+        .calendar-day.today {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+        
+        .calendar-day.other-month {
+            background: #f8f9fa;
+            opacity: 0.5;
+        }
+        
+        .calendar-day.no-habil {
+            background: #ffe6e6;
+        }
+        
+        .calendar-day-number {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .event-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 1px;
+        }
+        
+        .event-dot.tarea { background: #28a745; }
+        .event-dot.audiencia { background: #ffc107; }
+        
+        .empty-state {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 2rem;
+            background: rgba(108, 117, 125, 0.1);
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        
+        .user-info {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(220, 53, 69, 0.3);
+            color: white;
+        }
+        
+        .evento-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .evento-badge.tarea {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .evento-badge.audiencia {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1><i class="fas fa-balance-scale me-2"></i>Firma Jurídica Lex Nova</h1>
+                </div>
+                <div class="col-md-6 text-end">
+                    <span class="user-info">
+                        <i class="fas fa-user-circle me-1"></i>
+                        Bienvenido, {{ user.get_full_name|default:user.username }}
+                    </span>
+                    {% if perms_usuario.es_administrador %}
+                    <button class="btn btn-users" data-bs-toggle="modal" data-bs-target="#usersModal">
+                        <i class="fas fa-users-cog me-2"></i>Usuarios
+                    </button>
+                    {% endif %}
+                    <button class="btn btn-config" data-bs-toggle="modal" data-bs-target="#configModal">
+                        <i class="fas fa-cog me-2"></i>Configuración
+                    </button>
+                    <button class="btn btn-add-client" data-bs-toggle="modal" data-bs-target="#addClientModal">
+                        <i class="fas fa-plus me-2"></i>Nuevo Cliente
+                    </button>
+                    <button class="btn btn-calendar" data-bs-toggle="modal" data-bs-target="#calendarModal">
+                        <i class="fas fa-calendar-alt me-2"></i>Calendario
+                    </button>
+                    <a href="{% url 'logout' %}" class="btn logout-btn">
+                        <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Panel de Botones de Gestión -->
+        <div class="management-panel">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a href="{% url 'gestion_clientes' %}" class="management-btn">
+                        <i class="fas fa-users"></i>
+                        <span>Gestión de Clientes y Casos</span>
+                    </a>
+                    
+                    <a href="{% url 'agenda_tareas' %}" class="management-btn">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Agenda y Tareas</span>
+                    </a>
+                    
+                    <a href="{% url 'pagos_finanzas' %}" class="management-btn">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Pagos y Finanzas</span>
+                    </a>
+                    
+                    <a href="{% url 'documentos_reportes' %}" class="management-btn">
+                        <i class="fas fa-folder-open"></i>
+                        <span>Documentos y Reportes</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Botón Exportar Hoja de Seguimiento -->
+<div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportarSeguimientoModal">
+        <i class="fas fa-file-export me-2"></i>Exportar Hoja de Seguimiento
+    </button>
+</div>
+
+        <!-- Widgets - ACTUALIZADOS A 4 -->
+        <div class="widgets-container">
+            <!-- Widget 1: Tareas y Audiencias de Hoy -->
+            <div class="widget">
+                <div class="widget-header">
+                    <i class="fas fa-calendar-day me-2"></i>Tareas y Audiencias de Hoy
+                </div>
+                <div class="widget-content" id="widgetHoy">
+                    <div class="empty-state">No hay actividades para hoy</div>
+                </div>
+            </div>
+
+            <!-- Widget 2: Tareas y Audiencias de Mañana -->
+            <div class="widget">
+                <div class="widget-header">
+                    <i class="fas fa-calendar-plus me-2"></i>Tareas y Audiencias de Mañana
+                </div>
+                <div class="widget-content" id="widgetManana">
+                    <div class="empty-state">No hay actividades para mañana</div>
+                </div>
+            </div>
+
+            <!-- Widget 3: Tareas y Audiencias de Pasado Mañana -->
+            <div class="widget">
+                <div class="widget-header">
+                    <i class="fas fa-calendar-week me-2"></i>Tareas y Audiencias de Pasado Mañana
+                </div>
+                <div class="widget-content" id="widgetPasadoManana">
+                    <div class="empty-state">No hay actividades para pasado mañana</div>
+                </div>
+            </div>
+
+            <!-- Widget 4: Tareas Vencidas -->
+            <div class="widget">
+                <div class="widget-header">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Tareas Vencidas
+                </div>
+                <div class="widget-content" id="widgetVencidas">
+                    <div class="empty-state">No hay tareas vencidas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendario Funcional -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="btn btn-outline-light" onclick="mesAnterior()">
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <h3 id="mesActual">Octubre 2025</h3>
+                <button class="btn btn-outline-light" onclick="mesSiguiente()">
+                    Siguiente <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="calendar-grid" id="calendarioGrid">
+                <!-- Headers de días -->
+                <div class="calendar-day-header">Dom</div>
+                <div class="calendar-day-header">Lun</div>
+                <div class="calendar-day-header">Mar</div>
+                <div class="calendar-day-header">Mié</div>
+                <div class="calendar-day-header">Jue</div>
+                <div class="calendar-day-header">Vie</div>
+                <div class="calendar-day-header">Sáb</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Calendario Interactivo -->
+    <div class="modal fade" id="calendarModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-calendar-alt me-2"></i>Calendario - Tareas y Audiencias</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="row g-0" style="height: 85vh;">
+                        <!-- Panel Izquierdo - Calendario -->
+                        <div class="col-md-8 p-4" style="border-right: 2px solid #e9ecef; overflow-y: auto;">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <button class="btn btn-outline-primary" onclick="cambiarMesCalendario(-1)">
+                                    <i class="fas fa-chevron-left"></i> Anterior
+                                </button>
+                                <h4 id="mesCalendarioModal">Octubre 2025</h4>
+                                <button class="btn btn-outline-primary" onclick="cambiarMesCalendario(1)">
+                                    Siguiente <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            
+                            <div id="calendarioModalGrid"></div>
+                        </div>
+                        
+                        <!-- Panel Derecho - Eventos del Día Seleccionado -->
+                        <div class="col-md-4 p-4" style="overflow-y: auto; background: #f8f9fa;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 id="fechaSeleccionada">Selecciona un día</h5>
+                                <button class="btn btn-sm btn-success" onclick="mostrarFormularioEvento()">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                            
+                            <!-- Formulario para agregar evento -->
+                            <div id="formularioEvento" style="display: none;" class="mb-4 p-3 bg-white rounded shadow-sm">
+                                <h6>Nuevo Evento</h6>
+                                <form id="formNuevoEvento">
+                                    <input type="hidden" id="fechaEvento" name="fecha">
+                                    
+                                    <div class="mb-2">
+                                        <label class="form-label">Tipo</label>
+                                        <select class="form-select form-select-sm" id="tipoEvento" name="tipo" onchange="cambiarTipoEvento()">
+                                            <option value="TAREA">Tarea</option>
+                                            <option value="AUDIENCIA">Audiencia</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <label class="form-label">Cliente / NUREJ</label>
+                                        <input type="text" class="form-control form-control-sm" name="cliente_nurej" placeholder="Nombre o NUREJ" required>
+                                    </div>
+                                    
+                                    <div class="mb-2" id="campoTipoTarea">
+                                        <label class="form-label">Tipo de Tarea</label>
+                                        <select class="form-select form-select-sm" name="tipo_tarea">
+                                            <option value="REVISION">Revisión</option>
+                                            <option value="SEGUIMIENTO">Seguimiento</option>
+                                            <option value="CONSULTA">Consulta</option>
+                                            <option value="NOTIFICACION">Notificación</option>
+                                            <option value="OTRO">Otro</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-2" id="campoHora" style="display: none;">
+                                        <label class="form-label">Hora</label>
+                                        <input type="time" class="form-control form-control-sm" name="hora" required>
+                                    </div>
+                                    
+                                    <div class="mb-2" id="campoJuzgado" style="display: none;">
+                                        <label class="form-label">Juzgado</label>
+                                        <input type="text" class="form-control form-control-sm" name="juzgado" placeholder="Nombre del juzgado">
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <label class="form-label">Descripción</label>
+                                        <textarea class="form-control form-control-sm" name="descripcion" rows="2" required></textarea>
+                                    </div>
+                                    
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-sm btn-success flex-fill" onclick="guardarEvento()">
+                                            <i class="fas fa-save"></i> Guardar
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-secondary flex-fill" onclick="cerrarFormularioEvento()">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- Lista de eventos del día -->
+                            <div id="eventosDelDia">
+                                <p class="text-muted text-center">Selecciona un día para ver sus eventos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle de Evento -->
+    <div class="modal fade" id="detalleEventoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detalleEventoTitulo">Detalle del Evento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="detalleEventoContenido">
+                    <!-- Se llena dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Exportar Hoja de Seguimiento -->
+<div class="modal fade" id="exportarSeguimientoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white;">
+                <h5 class="modal-title"><i class="fas fa-file-export me-2"></i>Exportar Hoja de Seguimiento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formExportarSeguimiento">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tipo de Eventos</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="exportTodas" checked>
+                            <label class="form-check-label fw-bold" for="exportTodas">
+                                Todas las actividades
+                            </label>
+                        </div>
+                        <div class="form-check ms-3">
+                            <input class="form-check-input export-tipo" type="checkbox" value="TAREA" id="exportTareas" checked>
+                            <label class="form-check-label" for="exportTareas">
+                                Tareas
+                            </label>
+                        </div>
+                        <div class="form-check ms-3">
+                            <input class="form-check-input export-tipo" type="checkbox" value="AUDIENCIA" id="exportAudiencias" checked>
+                            <label class="form-check-label" for="exportAudiencias">
+                                Audiencias
+                            </label>
+                        </div>
+                        <div class="form-check ms-3">
+                            <input class="form-check-input export-tipo" type="checkbox" value="REVISION" id="exportRevision" checked>
+                            <label class="form-check-label" for="exportRevision">
+                                Revisión de Expedientes
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Período</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="periodo" value="hoy" id="periodoHoy" checked>
+                            <label class="form-check-label" for="periodoHoy">
+                                Hoy
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="periodo" value="manana" id="periodoManana">
+                            <label class="form-check-label" for="periodoManana">
+                                Mañana
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="periodo" value="pasado_manana" id="periodoPasadoManana">
+                            <label class="form-check-label" for="periodoPasadoManana">
+                                Pasado Mañana
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="periodo" value="vencidas" id="periodoVencidas">
+                            <label class="form-check-label" for="periodoVencidas">
+                                Vencidas
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="exportarSeguimiento()">
+                    <i class="fas fa-download me-2"></i>Exportar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Tarea/Audiencia -->
+<div class="modal fade" id="editarEventoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); color: white;">
+                <h5 class="modal-title" id="editarEventoTitulo">Editar Evento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarEvento">
+                    <input type="hidden" id="editarEventoId">
+                    <input type="hidden" id="editarEventoTipo">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tipo de Evento</label>
+                        <select class="form-select" id="editarTipoEvento" required onchange="cambiarTipoEditar()">
+                            <option value="TAREA">Tarea</option>
+                            <option value="AUDIENCIA">Audiencia</option>
+                            <option value="EVENTO">Evento Importante</option>
+                            <option value="REVISION">Revisión Expediente</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Fecha</label>
+                        <input type="date" class="form-control" id="editarEventoFecha" required>
+                    </div>
+                    
+                    <div class="mb-3" id="editarCampoHora" style="display: none;">
+                        <label class="form-label fw-bold">Hora</label>
+                        <input type="time" class="form-control" id="editarEventoHora">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descripción</label>
+                        <textarea class="form-control" id="editarEventoDescripcion" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Cliente (Opcional)</label>
+                        <select class="form-select" id="editarEventoCliente">
+                            <option value="">Sin Cliente</option>
+                            <!-- Los clientes se cargarán aquí con JavaScript -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-warning" onclick="guardarEdicionEvento()">
+                    <i class="fas fa-save me-2"></i>Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variables globales
+        let fechaActual = new Date();
+        let mesActual = fechaActual.getMonth();
+        let anoActual = fechaActual.getFullYear();
+        let mesModalActual = new Date().getMonth();
+        let anoModalActual = new Date().getFullYear();
+        let fechaSeleccionadaGlobal = null;
+        
+        const nombresMeses = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+        
+        // Datos de ejemplo (en producción vendrían de Django)
+        // Datos reales desde Django
+const eventosCalendario = [
+    {% for tarea in tareas_hoy %}
+    {
+        id: {{ tarea.id }},
+        fecha: '{{ tarea.fecha|date:"Y-m-d" }}',
+        tipo: 'tarea',
+        tipoTarea: '{{ tarea.tipo }}',
+        descripcion: '{{ tarea.descripcion|escapejs }}',
+        cliente: '{{ tarea.cliente.nombre|escapejs }}',
+        nurej: '{{ tarea.cliente.nurej }}',
+        telefono: '{{ audiencia.cliente.telefono }}'
+    },
+    {% endfor %}
+    {% for tarea in tareas_manana %}
+    {
+        id: {{ tarea.id }},
+        fecha: '{{ tarea.fecha|date:"Y-m-d" }}',
+        tipo: 'tarea',
+        tipoTarea: '{{ tarea.tipo }}',
+        descripcion: '{{ tarea.descripcion|escapejs }}',
+        cliente: '{{ tarea.cliente.nombre|escapejs }}',
+        nurej: '{{ tarea.cliente.nurej }}',
+        telefono: '{{ audiencia.cliente.telefono }}'
+    },
+    {% endfor %}
+    {% for tarea in tareas_vencidas %}
+    {
+        id: {{ tarea.id }},
+        fecha: '{{ tarea.fecha|date:"Y-m-d" }}',
+        tipo: 'tarea',
+        tipoTarea: '{{ tarea.tipo }}',
+        descripcion: '{{ tarea.descripcion|escapejs }}',
+        cliente: '{{ tarea.cliente.nombre|escapejs }}',
+        nurej: '{{ tarea.cliente.nurej }}',
+        telefono: '{{ audiencia.cliente.telefono }}'
+    },
+    {% endfor %}
+    {% for audiencia in audiencias_hoy %}
+    {
+        id: {{ audiencia.id }},
+        fecha: '{{ audiencia.fecha|date:"Y-m-d" }}',
+        tipo: 'audiencia',
+        descripcion: '{{ audiencia.detalle|escapejs }}',
+        cliente: '{{ audiencia.cliente.nombre|escapejs }}',
+        nurej: '{{ audiencia.cliente.nurej }}',
+        hora: '{{ audiencia.hora }}',
+        juzgado: '{{ audiencia.cliente.juzgado|escapejs }}',
+        telefono: '{{ audiencia.cliente.telefono }}'
+    },
+    {% endfor %}
+    {% for audiencia in audiencias_manana %}
+    {
+        id: {{ audiencia.id }},
+        fecha: '{{ audiencia.fecha|date:"Y-m-d" }}',
+        tipo: 'audiencia',
+        descripcion: '{{ audiencia.detalle|escapejs }}',
+        cliente: '{{ audiencia.cliente.nombre|escapejs }}',
+        nurej: '{{ audiencia.cliente.nurej }}',
+        hora: '{{ audiencia.hora }}',
+        juzgado: '{{ audiencia.cliente.juzgado|escapejs }}',
+        telefono: '{{ audiencia.cliente.telefono }}'
+    },
+    {% endfor %}
+{% for tarea in tareas_pasado_manana %}
+    {
+        id: {{ tarea.id }},
+        fecha: '{{ tarea.fecha|date:"Y-m-d" }}',
+        tipo: 'tarea',
+        tipoTarea: '{{ tarea.tipo }}',
+        descripcion: '{{ tarea.descripcion|escapejs }}',
+        cliente: '{{ tarea.cliente.nombre|escapejs }}',
+        nurej: '{{ tarea.cliente.nurej }}',
+        telefono: '{{ audiencia.cliente.telefono }}'
+    },
+    {% endfor %}
+    {% for audiencia in audiencias_pasado_manana %}
+    {
+        id: {{ audiencia.id }},
+        fecha: '{{ audiencia.fecha|date:"Y-m-d" }}',
+        tipo: 'audiencia',
+        descripcion: '{{ audiencia.detalle|escapejs }}',
+        cliente: '{{ audiencia.cliente.nombre|escapejs }}',
+        nurej: '{{ audiencia.cliente.nurej }}',
+        hora: '{{ audiencia.hora }}',
+        juzgado: '{{ audiencia.cliente.juzgado|escapejs }}',
+        telefono: '{{ audiencia.cliente.telefono }}'
+    },
+    {% endfor %}
+].filter(e => e.id); // Filtrar elementos válidos
+        
+        // Función para verificar si es día hábil
+        function esDiaHabil(fecha) {
+            const dia = fecha.getDay();
+            return dia !== 0 && dia !== 6; // No es domingo ni sábado
+        }
+        
+        // Función para sumar días hábiles
+        function sumarDiasHabiles(fecha, dias) {
+            let resultado = new Date(fecha);
+            let diasAgregados = 0;
+            
+            while (diasAgregados < dias) {
+                resultado.setDate(resultado.getDate() + 1);
+                if (esDiaHabil(resultado)) {
+                    diasAgregados++;
+                }
+            }
+            
+            return resultado;
+        }
+        function cargarClientes() {
+    fetch('/api/obtener-clientes/')
+        .then(response => response.json())
+        .then(data => {
+            const selectCliente = document.getElementById('editarEventoCliente');
+            
+            // Limpiar opciones previas (excepto la primera)
+            while (selectCliente.options.length > 1) {
+                selectCliente.remove(1);
+            }
+            
+            // Agregar clientes
+            if (data.clientes) {
+                data.clientes.forEach(cliente => {
+                    const option = document.createElement('option');
+                    option.value = cliente.id;
+                    option.textContent = cliente.nombre;
+                    selectCliente.appendChild(option);
+                });
+            }
+        })
+        .catch(error => console.error('Error cargando clientes:', error));
+}
+        // Cargar widgets
+// Cargar widgets
+function cargarWidgets() {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    const manana = new Date(hoy);
+    manana.setDate(manana.getDate() + 1);
+    
+    const pasadoManana = new Date(hoy);
+    pasadoManana.setDate(pasadoManana.getDate() + 2);
+    
+    const formatoFecha = (fecha) => {
+        const ano = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        return `${ano}-${mes}-${dia}`;
+    };
+    
+    const fechaHoy = formatoFecha(hoy);
+    const fechaMañana = formatoFecha(manana);
+    const fechaPasadoMañana = formatoFecha(pasadoManana);
+    
+    // Eventos de HOY - solo los que tienen fecha de hoy
+    const eventosHoy = eventosCalendario.filter(e => e.fecha === fechaHoy);
+    cargarEventosEnWidget('widgetHoy', eventosHoy);
+    
+    // Eventos de MAÑANA - solo los que tienen fecha de mañana
+    const eventosManana = eventosCalendario.filter(e => e.fecha === fechaMañana);
+    cargarEventosEnWidget('widgetManana', eventosManana);
+    
+    // Eventos de PASADO MAÑANA - solo los que tienen fecha de pasado mañana
+    const eventosPasadoManana = eventosCalendario.filter(e => e.fecha === fechaPasadoMañana);
+    cargarEventosEnWidget('widgetPasadoManana', eventosPasadoManana);
+    
+    // Eventos VENCIDOS - solo fechas ANTERIORES a hoy (no incluye hoy)
+    const eventosVencidos = eventosCalendario.filter(e => {
+        // Comparar strings de fecha directamente
+        return e.fecha < fechaHoy && e.tipo === 'tarea';
+    });
+    cargarEventosEnWidget('widgetVencidas', eventosVencidos, true);
+}
+        
+       function cargarEventosEnWidget(widgetId, eventos, esVencido = false) {
+    const widget = document.getElementById(widgetId);
+    
+    if (eventos.length === 0) {
+        widget.innerHTML = '<div class="empty-state">No hay actividades</div>';
+        return;
+    }
+    
+    let html = '';
+    eventos.forEach(evento => {
+        const claseEvento = esVencido ? 'overdue' : evento.tipo;
+        const icono = evento.tipo === 'tarea' ? '📋' : '⚖️';
+        const badge = (evento.tipo === 'tarea' || evento.tipo === 'TAREA') ? 
+            `<span class="evento-badge tarea">${evento.tipoTarea || 'TAREA'}</span>` : 
+            `<span class="evento-badge audiencia">AUDIENCIA</span>`;
+        
+        html += `
+            <div class="widget-item ${claseEvento}">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flex-grow-1" onclick="mostrarDetalleEvento(${evento.id})" style="cursor: pointer;">
+                        ${badge}
+                        <strong>${icono} ${evento.descripcion}</strong><br>
+                        <small class="text-muted">${evento.cliente} - NUREJ: ${evento.nurej}</small>
+                        ${esVencido ? '<br><small class="text-danger fw-bold">⚠️ VENCIDA: ' + evento.fecha + '</small>' : ''}
+                    </div>
+                    <div class="btn-group-vertical" style="margin-left: 10px;">
+                        <button class="btn btn-sm btn-success" onclick="completarEvento(${evento.id}, '${evento.tipo}')" title="Completar">
+                            <i class="fas fa-check"></i>
+                
+                        <button class="btn btn-sm btn-info" onclick="reprogramarEvento(${evento.id}, '${evento.tipo}')" title="Reprogramar">
+                            <i class="fas fa-calendar-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    widget.innerHTML = html;
+}
+        
+function mostrarDetalleEvento(eventoId) {
+    const evento = eventosCalendario.find(e => e.id == eventoId);
+    if (!evento) return;
+    
+    const titulo = document.getElementById('detalleEventoTitulo');
+    const contenido = document.getElementById('detalleEventoContenido');
+    
+    titulo.textContent = evento.tipo === 'tarea' ? '📋 Detalle de Tarea' : '⚖️ Detalle de Audiencia';
+    
+    let html = `
+        <strong>Nombre del Cliente:</strong> ${evento.cliente || 'Sin cliente'}<br>
+        <strong>NUREJ:</strong> ${evento.nurej || 'N/A'}<br>
+        <strong>Fecha:</strong> ${evento.fecha}<br>
+        <strong>Teléfono:</strong> ${evento.telefono || 'No especificado'}<br>
+    `;
+    
+    if (evento.tipo === 'audiencia') {
+        html += `
+            <strong>Hora:</strong> ${evento.hora || 'No especificada'}<br>
+            <strong>Juzgado:</strong> ${evento.juzgado || 'No especificado'}<br>
+        `;
+    } else {
+        html += `
+            <strong>Tipo de Tarea:</strong> ${evento.tipoTarea || 'No especificado'}<br>
+        `;
+    }
+    
+    html += `
+        <strong>Descripción:</strong><br>
+        <div class="p-2 bg-light rounded mt-2">${evento.descripcion || 'Sin descripción'}</div>
+    `;
+    
+    contenido.innerHTML = html;
+    
+    const modalElement = document.getElementById('detalleEventoModal');
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+        function cambiarTipoEvento() {
+            const tipo = document.getElementById('tipoEvento').value;
+            const campoHora = document.getElementById('campoHora');
+            const campoJuzgado = document.getElementById('campoJuzgado');
+            const campoTipoTarea = document.getElementById('campoTipoTarea');
+            
+            if (tipo === 'AUDIENCIA') {
+                campoHora.style.display = 'block';
+                campoJuzgado.style.display = 'block';
+                campoTipoTarea.style.display = 'none';
+                document.querySelector('[name="hora"]').required = true;
+            } else {
+                campoHora.style.display = 'none';
+                campoJuzgado.style.display = 'none';
+                campoTipoTarea.style.display = 'block';
+                document.querySelector('[name="hora"]').required = false;
+            }
+        }
+        
+        function generarCalendarioModal(mes, ano) {
+            const grid = document.getElementById('calendarioModalGrid');
+            const mesHeader = document.getElementById('mesCalendarioModal');
+            
+            if (!grid || !mesHeader) return;
+            
+            mesHeader.textContent = nombresMeses[mes] + ' ' + ano;
+            grid.innerHTML = '';
+            
+            grid.style.display = 'grid';
+            grid.style.gridTemplateColumns = 'repeat(7, 1fr)';
+            grid.style.gap = '5px';
+            grid.style.background = '#e9ecef';
+            grid.style.padding = '10px';
+            grid.style.borderRadius = '10px';
+            
+            const dias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            dias.forEach(dia => {
+                const header = document.createElement('div');
+                header.style.cssText = 'background: #495057; color: white; padding: 12px; text-align: center; font-weight: 600; border-radius: 5px; font-size: 14px;';
+                header.textContent = dia;
+                grid.appendChild(header);
+            });
+            
+            const primerDia = new Date(ano, mes, 1).getDay();
+            const diasEnMes = new Date(ano, mes + 1, 0).getDate();
+            const hoy = new Date();
+            
+            for (let i = 0; i < primerDia; i++) {
+                const vacio = document.createElement('div');
+                vacio.style.cssText = 'min-height: 100px; background: #f8f9fa; border-radius: 5px; opacity: 0.5;';
+                grid.appendChild(vacio);
+            }
+            
+            for (let dia = 1; dia <= diasEnMes; dia++) {
+                const diaDiv = document.createElement('div');
+                const fechaDia = new Date(ano, mes, dia);
+                const fechaCompleta = ano + '-' + String(mes + 1).padStart(2, '0') + '-' + String(dia).padStart(2, '0');
+                
+                let esHoy = (ano === hoy.getFullYear() && mes === hoy.getMonth() && dia === hoy.getDate());
+                let esHabil = esDiaHabil(fechaDia);
+                
+                diaDiv.style.cssText = `
+                    min-height: 100px;
+                    background: ${!esHabil ? '#ffe6e6' : 'white'};
+                    border-radius: 8px;
+                    padding: 10px;
+                    cursor: pointer;
+                    border: 2px solid ${esHoy ? '#ffc107' : '#dee2e6'};
+                    transition: all 0.2s;
+                    display: flex;
+                    flex-direction: column;
+                `;
+                
+                diaDiv.onmouseover = function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                    this.style.zIndex = '10';
+                };
+                diaDiv.onmouseout = function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = 'none';
+                    this.style.zIndex = '1';
+                };
+                
+                diaDiv.onclick = function() {
+                    seleccionarDia(fechaCompleta, dia, mes, ano, esHabil);
+                };
+                
+                let contenido = `<div style="font-weight: 700; margin-bottom: 8px; font-size: 16px; ${esHoy ? 'color: #ffc107;' : 'color: #212529;'}">${dia}</div>`;
+                
+                if (!esHabil) {
+                    contenido += '<div style="font-size: 10px; color: #dc3545; font-weight: 600;">NO HÁBIL</div>';
+                }
+                
+                const eventosDelDia = eventosCalendario.filter(e => e.fecha === fechaCompleta);
+                if (eventosDelDia.length > 0) {
+                    const tareas = eventosDelDia.filter(e => e.tipo === 'tarea').length;
+                    const audiencias = eventosDelDia.filter(e => e.tipo === 'audiencia').length;
+                    
+                    if (tareas > 0) {
+                        contenido += `<div style="font-size: 11px; background: #d4edda; color: #155724; padding: 3px 6px; border-radius: 3px; margin-bottom: 3px;">📋 ${tareas} tarea(s)</div>`;
+                    }
+                    if (audiencias > 0) {
+                        contenido += `<div style="font-size: 11px; background: #fff3cd; color: #856404; padding: 3px 6px; border-radius: 3px;">⚖️ ${audiencias} audiencia(s)</div>`;
+                    }
+                }
+                
+                diaDiv.innerHTML = contenido;
+                grid.appendChild(diaDiv);
+            }
+            
+            const totalDias = primerDia + diasEnMes;
+            const diasFaltantes = totalDias % 7 === 0 ? 0 : 7 - (totalDias % 7);
+            for (let i = 0; i < diasFaltantes; i++) {
+                const vacio = document.createElement('div');
+                vacio.style.cssText = 'min-height: 100px; background: #f8f9fa; border-radius: 5px; opacity: 0.5;';
+                grid.appendChild(vacio);
+            }
+        }
+        
+        function cambiarMesCalendario(direccion) {
+            mesModalActual += direccion;
+            if (mesModalActual < 0) {
+                mesModalActual = 11;
+                anoModalActual--;
+            }
+            if (mesModalActual > 11) {
+                mesModalActual = 0;
+                anoModalActual++;
+            }
+            generarCalendarioModal(mesModalActual, anoModalActual);
+        }
+        
+        function seleccionarDia(fecha, dia, mes, ano, esHabil) {
+            fechaSeleccionadaGlobal = fecha;
+            document.getElementById('fechaEvento').value = fecha;
+            
+            const diaTexto = esHabil ? '' : ' (NO HÁBIL)';
+            document.getElementById('fechaSeleccionada').textContent = dia + ' de ' + nombresMeses[mes] + ' ' + ano + diaTexto;
+            
+            const eventosDiv = document.getElementById('eventosDelDia');
+            const eventos = eventosCalendario.filter(e => e.fecha === fecha);
+            
+            if (eventos.length === 0) {
+                eventosDiv.innerHTML = '<div style="text-align: center; padding: 30px; color: #6c757d;"><i class="fas fa-calendar-times" style="font-size: 48px; opacity: 0.3; display: block; margin-bottom: 10px;"></i>No hay eventos este día</div>';
+            } else {
+                let html = '<div style="max-height: 400px; overflow-y: auto;">';
+                eventos.forEach(evento => {
+                    const color = evento.tipo === 'tarea' ? '#28a745' : '#ffc107';
+                    const icono = evento.tipo === 'tarea' || evento.tipo === 'TAREA' ? '📋' : '⚖️';
+                    const tipoTexto = evento.tipo === 'tarea' ? 'Tarea' : 'Audiencia';
+                    
+                    html += `
+                        <div style="background: white; border-left: 5px solid ${color}; padding: 15px; margin-bottom: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s; cursor: pointer;" onclick="mostrarDetalleEvento(${evento.id})" onmouseover="this.style.transform='translateX(5px)'" onmouseout="this.style.transform='translateX(0)'">
+                            <div style="font-weight: 700; margin-bottom: 8px; font-size: 14px; color: ${color};">
+                                ${icono} ${tipoTexto}
+                            </div>
+                            <div style="font-size: 13px; color: #495057; margin-bottom: 5px;">${evento.descripcion}</div>
+                            <div style="font-size: 12px; color: #6c757d;">
+                                ${evento.cliente} - NUREJ: ${evento.nurej}
+                                ${evento.tipo === 'audiencia' ? '<br>🕐 ' + evento.hora + ' - ' + evento.juzgado : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                eventosDiv.innerHTML = html;
+            }
+        }
+        
+        function mostrarFormularioEvento() {
+            if (!fechaSeleccionadaGlobal) {
+                alert('⚠️ Por favor selecciona un día del calendario primero');
+                return;
+            }
+            
+            const fechaSeleccionada = new Date(fechaSeleccionadaGlobal);
+            if (!esDiaHabil(fechaSeleccionada)) {
+                if (!confirm('⚠️ ADVERTENCIA: El día seleccionado NO ES HÁBIL (fin de semana).\n\n¿Está seguro que desea programar un evento en este día?')) {
+                    return;
+                }
+            }
+            
+            document.getElementById('formularioEvento').style.display = 'block';
+        }
+        
+        function cerrarFormularioEvento() {
+            document.getElementById('formularioEvento').style.display = 'none';
+            document.getElementById('formNuevoEvento').reset();
+        }
+        
+        function guardarEvento() {
+            const form = document.getElementById('formNuevoEvento');
+            const tipo = document.getElementById('tipoEvento').value;
+            const fecha = document.getElementById('fechaEvento').value;
+            const clienteNurej = form.querySelector('[name="cliente_nurej"]').value;
+            const descripcion = form.querySelector('[name="descripcion"]').value;
+            
+            // Validaciones
+            if (!clienteNurej || !descripcion) {
+                alert('❌ Por favor complete todos los campos obligatorios');
+                return;
+            }
+            
+            if (tipo === 'AUDIENCIA') {
+                const hora = form.querySelector('[name="hora"]').value;
+                const juzgado = form.querySelector('[name="juzgado"]').value;
+                
+                if (!hora) {
+                    alert('❌ Por favor ingrese la hora de la audiencia');
+                    return;
+                }
+                
+                const fechaAudiencia = new Date(fecha);
+                if (!esDiaHabil(fechaAudiencia)) {
+                    alert('⚠️ ERROR: No se puede programar una audiencia en un día NO HÁBIL');
+                    return;
+                }
+            }
+            
+            // Aquí iría la llamada al servidor
+            alert('✓ Evento guardado exitosamente\n\nEn producción, esto se guardará en la base de datos.');
+            cerrarFormularioEvento();
+            
+            // Simulación: agregar al array y recargar
+            const nuevoEvento = {
+                id: eventosCalendario.length + 1,
+                fecha: fecha,
+                tipo: tipo.toLowerCase(),
+                descripcion: descripcion,
+                cliente: clienteNurej,
+                nurej: clienteNurej
+            };
+            
+            if (tipo === 'AUDIENCIA') {
+                nuevoEvento.hora = form.querySelector('[name="hora"]').value;
+                nuevoEvento.juzgado = form.querySelector('[name="juzgado"]').value;
+            } else {
+                nuevoEvento.tipoTarea = form.querySelector('[name="tipo_tarea"]').value;
+            }
+            
+            eventosCalendario.push(nuevoEvento);
+            generarCalendarioModal(mesModalActual, anoModalActual);
+            cargarWidgets();
+            seleccionarDia(fecha, new Date(fecha).getDate(), new Date(fecha).getMonth(), new Date(fecha).getFullYear(), esDiaHabil(new Date(fecha)));
+        }
+        
+        function generarCalendario(mes, ano) {
+            const grid = document.getElementById('calendarioGrid');
+            const mesHeader = document.getElementById('mesActual');
+            
+            mesHeader.textContent = nombresMeses[mes] + ' ' + ano;
+            
+            const diasAnteriores = grid.querySelectorAll('.calendar-day');
+            diasAnteriores.forEach(dia => dia.remove());
+            
+            const primerDia = new Date(ano, mes, 1).getDay();
+            const diasEnMes = new Date(ano, mes + 1, 0).getDate();
+            const hoy = new Date();
+            
+            const mesAnterior = mes === 0 ? 11 : mes - 1;
+            const anoAnterior = mes === 0 ? ano - 1 : ano;
+            const diasMesAnterior = new Date(anoAnterior, mesAnterior + 1, 0).getDate();
+            
+            for (let i = primerDia - 1; i >= 0; i--) {
+                const diaDiv = document.createElement('div');
+                diaDiv.className = 'calendar-day other-month';
+                diaDiv.innerHTML = '<div class="calendar-day-number">' + (diasMesAnterior - i) + '</div>';
+                grid.appendChild(diaDiv);
+            }
+            
+            for (let dia = 1; dia <= diasEnMes; dia++) {
+                const diaDiv = document.createElement('div');
+                diaDiv.className = 'calendar-day';
+                
+                const fechaDia = new Date(ano, mes, dia);
+                if (!esDiaHabil(fechaDia)) {
+                    diaDiv.classList.add('no-habil');
+                }
+                
+                if (ano === hoy.getFullYear() && mes === hoy.getMonth() && dia === hoy.getDate()) {
+                    diaDiv.classList.add('today');
+                }
+                
+                const fechaFormateada = ano + '-' + String(mes + 1).padStart(2, '0') + '-' + String(dia).padStart(2, '0');
+                
+                let contenidoDia = '<div class="calendar-day-number">' + dia + '</div>';
+                
+                const eventosDelDia = eventosCalendario.filter(evento => evento.fecha === fechaFormateada);
+                eventosDelDia.forEach(evento => {
+                    contenidoDia += '<div class="event-dot ' + evento.tipo + '" title="' + evento.descripcion + '"></div>';
+                });
+                
+                diaDiv.innerHTML = contenidoDia;
+                grid.appendChild(diaDiv);
+            }
+            
+            const totalCeldas = grid.children.length - 7;
+            const celdasRestantes = 42 - totalCeldas;
+            
+            for (let dia = 1; dia <= celdasRestantes; dia++) {
+                const diaDiv = document.createElement('div');
+                diaDiv.className = 'calendar-day other-month';
+                diaDiv.innerHTML = '<div class="calendar-day-number">' + dia + '</div>';
+                grid.appendChild(diaDiv);
+            }
+        }
+        
+        function mesAnterior() {
+            mesActual--;
+            if (mesActual < 0) {
+                mesActual = 11;
+                anoActual--;
+            }
+            generarCalendario(mesActual, anoActual);
+        }
+        
+        function mesSiguiente() {
+            mesActual++;
+            if (mesActual > 11) {
+                mesActual = 0;
+                anoActual++;
+            }
+            generarCalendario(mesActual, anoActual);
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            generarCalendario(mesActual, anoActual);
+            cargarWidgets();
+        });
+        
+        document.getElementById('calendarModal').addEventListener('shown.bs.modal', function () {
+            generarCalendarioModal(mesModalActual, anoModalActual);
+        });
+       function submitAddClient() {
+    const form = document.getElementById('addClientForm');
+    const formData = new FormData(form);
+    
+    fetch('{% url "agregar_cliente" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('#addClientForm [name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Cerrar el modal
+            var modal = bootstrap.Modal.getInstance(document.getElementById('addClientModal'));
+            modal.hide();
+            
+            // Mostrar mensaje con opción de imprimir
+            if (confirm('✓ Cliente "' + data.cliente_nombre + '" registrado exitosamente.\n\n¿Desea imprimir la Ficha Técnica ahora?')) {
+                // Usar URL template - Construir la URL correctamente
+                const urlFicha = "{% url 'exportar_ficha_tecnica' 0 %}".replace('0', data.cliente_id);
+                window.open(urlFicha, '_blank');
+            }
+            
+            // Recargar página después de 1 segundo
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            alert('Error al registrar cliente: ' + (data.error || 'Error desconocido'));
+        }
+    })
+    .catch(error => {
+        alert('Error de conexión: ' + error);
+    });
+}
+
+function createUser() {
+    const form = document.getElementById('createUserForm');
+    const formData = new FormData(form);
+    
+    fetch('{% url "crear_usuario" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('#createUserForm [name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Usuario creado exitosamente');
+            form.reset();
+            var modal = bootstrap.Modal.getInstance(document.getElementById('usersModal'));
+            modal.hide();
+            location.reload();
+        } else {
+            alert('Error al crear usuario');
+        }
+    })
+    .catch(error => {
+        alert('Error de conexión: ' + error);
+    });
+}
+function eliminarUsuario(usuarioId) {
+    if (!confirm('⚠️ ¿Está seguro que desea eliminar este usuario?\n\nEsta acción no se puede deshacer.')) {
+        return;
+    }
+    
+    fetch('{% url "eliminar_usuario" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('#usersModal [name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({ usuario_id: usuarioId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✓ Usuario eliminado correctamente');
+            location.reload();
+        } else {
+            alert('❌ Error al eliminar usuario: ' + (data.error || 'Error desconocido'));
+        }
+    })
+    .catch(error => {
+        alert('❌ Error de conexión: ' + error);
+    });
+}
+// Control del checkbox "Todas"
+document.getElementById('exportTodas').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.export-tipo');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+});
+
+// Función para exportar seguimiento
+function exportarSeguimiento() {
+    const periodo = document.querySelector('input[name="periodo"]:checked').value;
+    
+    // Obtener tipos seleccionados
+    const tiposSeleccionados = [];
+    document.querySelectorAll('.export-tipo:checked').forEach(cb => {
+        tiposSeleccionados.push(cb.value);
+    });
+    
+    if (tiposSeleccionados.length === 0) {
+        alert('⚠️ Por favor selecciona al menos un tipo de evento');
+        return;
+    }
+    
+    // Construir URL con parámetros
+    const params = new URLSearchParams({
+        periodo: periodo,
+        tipos: tiposSeleccionados.join(',')
+    });
+    
+    // Abrir PDF en nueva pestaña
+    window.open('/exportar-seguimiento/?' + params.toString(), '_blank');
+    
+    // Cerrar modal
+    var modal = bootstrap.Modal.getInstance(document.getElementById('exportarSeguimientoModal'));
+    modal.hide();
+}
+function reprogramarEvento(eventoId, tipo) {
+    const evento = eventosCalendario.find(e => e.id === eventoId);
+    if (!evento) return;
+    
+    document.getElementById('reprogramarEventoId').value = eventoId;
+    document.getElementById('reprogramarEventoTipo').value = tipo;
+    document.getElementById('reprogramarFecha').value = evento.fecha;
+    
+    if (tipo === 'audiencia' || tipo === 'AUDIENCIA') {
+        document.getElementById('reprogramarCampoHora').style.display = 'block';
+        document.getElementById('reprogramarHora').value = evento.hora || '';
+    } else {
+        document.getElementById('reprogramarCampoHora').style.display = 'none';
+    }
+    
+    var modal = new bootstrap.Modal(document.getElementById('reprogramarEventoModal'));
+    modal.show();
+}
+
+function guardarReprogramacion() {
+    const eventoId = document.getElementById('reprogramarEventoId').value;
+    const tipo = document.getElementById('reprogramarEventoTipo').value;
+    const nuevaFecha = document.getElementById('reprogramarFecha').value;
+    const nuevaHora = document.getElementById('reprogramarHora').value || null;
+    
+    if (!nuevaFecha) {
+        alert('⚠️ Por favor ingrese una nueva fecha');
+        return;
+    }
+    
+    const url = tipo === 'tarea' ? '/gestion/reprogramar-tarea/' : '/gestion/reprogramar-audiencia/';
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            evento_id: eventoId,
+            nueva_fecha: nuevaFecha,
+            nueva_hora: nuevaHora
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✓ Evento reprogramado');
+            var modal = bootstrap.Modal.getInstance(document.getElementById('reprogramarEventoModal'));
+            modal.hide();
+            cargarWidgets();
+        } else {
+            alert('❌ Error: ' + (data.error || 'No se pudo reprogramar'));
+        }
+    })
+    .catch(error => {
+        alert('❌ Error de conexión: ' + error);
+    });
+}
+// Función para completar evento
+function completarEvento(eventoId, tipo) {
+    if (!confirm('¿Marcar como completada esta actividad?')) {
+        return;
+    }
+    
+    const url = tipo === 'tarea' ? '/gestion/completar-tarea/' : '/gestion/completar-audiencia/';
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ evento_id: eventoId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✓ Actividad completada');
+            location.reload();
+        } else {
+            alert('❌ Error: ' + (data.error || 'No se pudo completar'));
+        }
+    })
+    .catch(error => {
+        alert('❌ Error de conexión: ' + error);
+    });
+}
+
+// Función para editar evento
+function editarEvento(eventoId, tipo) {
+    const evento = eventosCalendario.find(e => e.id === eventoId && e.tipo === tipo);
+    if (!evento) return;
+    
+    document.getElementById('editarEventoId').value = eventoId;
+    document.getElementById('editarEventoTipo').value = tipo;
+    document.getElementById('editarEventoFecha').value = evento.fecha;
+    document.getElementById('editarEventoDescripcion').value = evento.descripcion;
+    document.getElementById('editarEventoHora').value = evento.hora || '';
+    
+    if (tipo === 'audiencia') {
+        document.getElementById('editarCampoHora').style.display = 'block';
+    } else {
+        document.getElementById('editarCampoHora').style.display = 'none';
+    }
+    
+    var modal = new bootstrap.Modal(document.getElementById('editarEventoModal'));
+    modal.show();
+}
+function cambiarTipoEditar() {
+    const tipo = document.getElementById('editarTipoEvento').value;
+    
+    if (tipo === 'audiencia') {
+        document.getElementById('editarCampoHora').style.display = 'block';
+    } else {
+        document.getElementById('editarCampoHora').style.display = 'none';
+    }
+}
+// Función para guardar edición
+function guardarEdicionEvento() {
+    const eventoId = document.getElementById('editarEventoId').value;
+    const tipo = document.getElementById('editarEventoTipo').value;
+    const fecha = document.getElementById('editarEventoFecha').value;
+    const descripcion = document.getElementById('editarEventoDescripcion').value;
+    const hora = document.getElementById('editarEventoHora').value;
+    
+    if (!fecha || !descripcion) {
+        alert('⚠️ Por favor complete todos los campos');
+        return;
+    }
+    
+    const url = tipo === 'tarea' ? '/gestion/editar-tarea/' : '/gestion/editar-audiencia/';
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            evento_id: eventoId,
+            fecha: fecha,
+            descripcion: descripcion,
+            hora: hora
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✓ Cambios guardados');
+            var modal = bootstrap.Modal.getInstance(document.getElementById('editarEventoModal'));
+            modal.hide();
+            location.reload();
+        } else {
+            alert('❌ Error: ' + (data.error || 'No se pudo guardar'));
+        }
+    })
+    .catch(error => {
+        alert('❌ Error de conexión: ' + error);
+    });
+}
+
+function reprogramarEvento(eventoId, tipo) {
+    const evento = eventosCalendario.find(e => e.id === eventoId);
+    if (!evento) return;
+    
+    document.getElementById('reprogramarEventoId').value = eventoId;
+    document.getElementById('reprogramarEventoTipo').value = tipo;
+    document.getElementById('reprogramarFecha').value = evento.fecha;
+    
+    // MOSTRAR HORA SOLO PARA TAREAS Y AUDIENCIAS
+    if (tipo === 'tarea' || tipo === 'audiencia') {
+        document.getElementById('reprogramarCampoHora').style.display = 'block';
+        document.getElementById('reprogramarHora').value = evento.hora || '';
+    } else {
+        document.getElementById('reprogramarCampoHora').style.display = 'none';
+    }
+    
+    var modal = new bootstrap.Modal(document.getElementById('reprogramarEventoModal'));
+    modal.show();
+}
+
+function guardarReprogramacion() {
+    const eventoId = document.getElementById('reprogramarEventoId').value;
+    const tipo = document.getElementById('reprogramarEventoTipo').value;
+    const nuevaFecha = document.getElementById('reprogramarFecha').value;
+    const nuevaHora = document.getElementById('reprogramarHora').value || null;
+    
+    if (!nuevaFecha) {
+        alert('⚠️ Por favor ingrese una nueva fecha');
+        return;
+    }
+    
+    const url = tipo === 'tarea' ? '/gestion/reprogramar-tarea/' : '/gestion/reprogramar-audiencia/';
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            evento_id: eventoId,
+            nueva_fecha: nuevaFecha,
+            nueva_hora: nuevaHora
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✓ Evento reprogramado');
+            var modal = bootstrap.Modal.getInstance(document.getElementById('reprogramarEventoModal'));
+            modal.hide();
+            cargarWidgets();
+        } else {
+            alert('❌ Error: ' + (data.error || 'No se pudo reprogramar'));
+        }
+    })
+    .catch(error => {
+        alert('❌ Error de conexión: ' + error);
+    });
+}
+// Función auxiliar para obtener CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+    </script>
+    <!-- Modal Configuración de Empresa -->
+<div class="modal fade" id="configModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); color: white;">
+                <h5 class="modal-title"><i class="fas fa-cog me-2"></i>Configuración de Empresa</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Dirección de la Empresa</label>
+                        <input type="text" class="form-control" name="direccion" 
+                               value="{{ config_empresa.direccion|default:'Av. [Nombre de la avenida] N° [XXX], Piso [X], La Paz – Bolivia' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Teléfono(s)</label>
+                        <input type="text" class="form-control" name="telefono" 
+                               value="{{ config_empresa.telefono|default:'(+591) [Número]' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email de Contacto</label>
+                        <input type="email" class="form-control" name="email" 
+                               value="{{ config_empresa.email|default:'contacto@lexnova.bo' }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100">
+                        <i class="fas fa-save me-2"></i>Actualizar Configuración
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Gestión de Usuarios -->
+<div class="modal fade" id="usersModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #6f42c1 0%, #6610f2 100%); color: white;">
+                <h5 class="modal-title"><i class="fas fa-users-cog me-2"></i>Gestión de Usuarios</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Crear Nuevo Usuario</h6>
+                        <form id="createUserForm">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">Nombre de Usuario</label>
+                                <input type="text" class="form-control" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nombre Completo</label>
+                                <input type="text" class="form-control" name="full_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" name="password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Permisos de Acceso</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permisos" value="clientes" id="permClientes">
+                                    <label class="form-check-label" for="permClientes">Gestión de Clientes</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permisos" value="agenda" id="permAgenda">
+                                    <label class="form-check-label" for="permAgenda">Agenda y Tareas</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permisos" value="pagos" id="permPagos">
+                                    <label class="form-check-label" for="permPagos">Pagos y Finanzas</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permisos" value="documentos" id="permDocs">
+                                    <label class="form-check-label" for="permDocs">Documentos y Reportes</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permisos" value="admin" id="permAdmin">
+                                    <label class="form-check-label" for="permAdmin">Administrador (Acceso Total)</label>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success" onclick="createUser()">
+                                <i class="fas fa-user-plus me-2"></i>Crear Usuario
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Usuarios Existentes</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                        <th>Rol</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for usuario in usuarios_sistema %}
+                                    <tr>
+                                        <td>{{ usuario.username }}</td>
+                                        <td>{{ usuario.email|default:"No definido" }}</td>
+                                        <td>
+                                            {% if usuario.perfilusuario.es_administrador %}
+                                                <span class="badge bg-danger">Administrador</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Usuario</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if usuario == user %}
+                                                <small class="text-muted">Usuario actual</small>
+                                            {% else %}
+                                                <button class="btn btn-sm btn-outline-danger" onclick="eliminarUsuario('{{ usuario.id }}')">Eliminar</button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Agregar Cliente -->
+<div class="modal fade" id="addClientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white;">
+                <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Registrar Nuevo Cliente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addClientForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">NUREJ</label>
+                            <input type="text" class="form-control" name="nurej" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Cédula de Identidad</label>
+                            <input type="text" class="form-control" name="cedula" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Nombre del Cliente</label>
+                            <input type="text" class="form-control" name="nombre" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Teléfono</label>
+                            <input type="text" class="form-control" name="telefono" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Tipo de Proceso</label>
+                            <input type="text" class="form-control" name="tipo_proceso" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Juzgado</label>
+                            <input type="text" class="form-control" name="juzgado" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Honorarios Pactados</label>
+                            <input type="number" step="0.01" class="form-control" name="honorarios_pactados" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Pago Inicial</label>
+                            <input type="number" step="0.01" class="form-control" name="pago_inicial" value="0">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Última Actuación</label>
+                            <textarea class="form-control" name="ultima_actuacion" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Fecha de la Última Actuación</label>
+                            <input type="date" class="form-control" name="fecha_ultima_actuacion">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Próxima Actuación</label>
+                            <textarea class="form-control" name="proxima_actuacion" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="submitAddClient()">
+                    <i class="fas fa-save me-2"></i>Registrar Nuevo Cliente
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL: Reprogramar Evento -->
+    <div class="modal fade" id="reprogramarEventoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-calendar-plus me-2"></i>Reprogramar Evento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formReprogramar">
+                        <input type="hidden" id="reprogramarEventoId">
+                        <input type="hidden" id="reprogramarEventoTipo">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nueva Fecha</label>
+                            <input type="date" class="form-control" id="reprogramarFecha" required>
+                        </div>
+                        
+                        <div class="mb-3" id="reprogramarCampoHora" style="display: none;">
+                            <label class="form-label fw-bold">Nueva Hora</label>
+                            <input type="time" class="form-control" id="reprogramarHora">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-info" onclick="guardarReprogramacion()">
+                        <i class="fas fa-save me-2"></i>Reprogramar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

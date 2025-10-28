@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes y Casos - Lex Nova</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2rem;
+        }
+        
+        .content-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+        
+        .search-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 2rem;
+            border-bottom: 3px solid #28a745;
+        }
+        
+        .search-input {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .search-input:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+        
+        .btn-search {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-search:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e9b8a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+            color: white;
+        }
+        
+        .btn-export {
+            background: linear-gradient(135deg, #fd7e14 0%, #ffc107 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-export:hover {
+            background: linear-gradient(135deg, #e8680d 0%, #e0a800 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(253, 126, 20, 0.3);
+            color: white;
+        }
+        
+        .action-buttons-section {
+            background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+            padding: 2rem;
+            border-bottom: 3px solid #28a745;
+        }
+        
+        .action-btn {
+            margin: 0.3rem;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .action-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .btn-pago {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .btn-pago:hover:not(:disabled) {
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-audiencia {
+            background: linear-gradient(135deg, #fd7e14 0%, #ffc107 100%);
+        }
+        
+        .btn-audiencia:hover:not(:disabled) {
+            box-shadow: 0 6px 15px rgba(253, 126, 20, 0.3);
+        }
+        
+        .btn-actuacion {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+        }
+        
+        .btn-actuacion:hover:not(:disabled) {
+            box-shadow: 0 6px 15px rgba(23, 162, 184, 0.3);
+        }
+        
+        .btn-editar {
+            background: linear-gradient(135deg, #6f42c1 0%, #6610f2 100%);
+        }
+        
+        .btn-editar:hover:not(:disabled) {
+            box-shadow: 0 6px 15px rgba(111, 66, 193, 0.3);
+        }
+        
+        .btn-estado {
+            background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
+        }
+        
+        .btn-estado:hover:not(:disabled) {
+            box-shadow: 0 6px 15px rgba(73, 80, 87, 0.3);
+        }
+        
+        .btn-eliminar {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+        
+        .btn-eliminar:hover:not(:disabled) {
+            box-shadow: 0 6px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-exportar-ficha {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+        
+        .btn-exportar-ficha:hover:not(:disabled) {
+            box-shadow: 0 6px 15px rgba(30, 60, 114, 0.3);
+        }
+        
+        .action-btn:disabled {
+            background: #6c757d !important;
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .action-btn:disabled:hover {
+            background: #6c757d !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .table-container {
+            padding: 2rem;
+            overflow-x: auto;
+        }
+        
+        .clients-table {
+            width: 100%;
+            margin-bottom: 0;
+        }
+        
+        .clients-table th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 1rem 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .clients-table td {
+            padding: 1rem 0.8rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+        
+        .clients-table tbody tr {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .clients-table tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .clients-table tbody tr.selected {
+            background-color: #e7f3ff;
+            border-left: 5px solid #28a745;
+        }
+        
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-activo {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-concluido {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-abandonado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .saldo-positivo {
+            color: #dc3545;
+            font-weight: 700;
+        }
+        
+        .saldo-cero {
+            color: #28a745;
+            font-weight: 700;
+        }
+        
+        .btn-volver {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-volver:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #3d4146 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+            color: white;
+        }
+        
+        .selected-client-info {
+            background: linear-gradient(135deg, #e7f3ff 0%, #cce7ff 100%);
+            border: 2px solid #28a745;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-header.custom {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-users me-3"></i>Gestión de Clientes y Casos</h1>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="{% url 'dashboard' %}" class="btn btn-volver">
+                        <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content-container">
+            <!-- Sección de Búsqueda y Exportación -->
+            <div class="search-section">
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-6">
+                        <form method="GET" class="d-flex">
+                            <input type="text" class="form-control search-input me-2" 
+                                   name="search" value="{{ search }}" 
+                                   placeholder="Buscar por NUREJ, Cédula o Nombre...">
+                            <button type="submit" class="btn btn-search">
+                                <i class="fas fa-search me-2"></i>Buscar
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="btn-group">
+                            <button class="btn btn-export dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fas fa-download me-2"></i>Exportar
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-pdf me-2"></i>Exportar PDF</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-excel me-2"></i>Exportar Excel</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción ARRIBA de la tabla -->
+            <div class="action-buttons-section">
+                <div class="selected-client-info" id="selectedClientInfo" style="display: none;">
+                    <strong>Cliente seleccionado:</strong> <span id="selectedClientName"></span>
+                </div>
+                
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <button class="btn action-btn btn-pago" id="btnPago" data-bs-toggle="modal" data-bs-target="#pagoModal" disabled>
+                            <i class="fas fa-dollar-sign me-2"></i>Registrar Pago
+                        </button>
+                        
+                        <button class="btn action-btn btn-audiencia" id="btnAudiencia" data-bs-toggle="modal" data-bs-target="#audienciaModal" disabled>
+                            <i class="fas fa-gavel me-2"></i>Programar Audiencia
+                        </button>
+                        
+                        <button class="btn action-btn btn-actuacion" id="btnActuacion" data-bs-toggle="modal" data-bs-target="#actuacionModal" disabled>
+                            <i class="fas fa-file-alt me-2"></i>Insertar Actuación
+                        </button>
+                        
+                        <button class="btn action-btn btn-editar" id="btnEditar" data-bs-toggle="modal" data-bs-target="#editarModal" disabled>
+                            <i class="fas fa-edit me-2"></i>Editar Datos
+                        </button>
+                        
+                        <button class="btn action-btn btn-estado" id="btnEstado" onclick="testFunction('Estado')" disabled>
+                            <i class="fas fa-flag me-2"></i>Cambiar Estado
+                        </button>
+                        
+                        <button class="btn action-btn btn-eliminar" id="btnEliminar" onclick="confirmDelete()" disabled>
+                            <i class="fas fa-trash me-2"></i>Eliminar Cliente
+                        </button>
+                        
+                        <button class="btn action-btn btn-exportar-ficha" id="btnExportar" onclick="exportarFicha()" disabled>
+                            <i class="fas fa-file-pdf me-2"></i>Exportar Ficha Técnica
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Clientes -->
+            <div class="table-container">
+                <table class="table clients-table" id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">Sel.</th>
+                            <th style="width: 8%;">NUREJ</th>
+                            <th style="width: 8%;">Cédula</th>
+                            <th style="width: 15%;">Nombre</th>
+                            <th style="width: 8%;">Teléfono</th>
+                            <th style="width: 10%;">Tipo Proceso</th>
+                            <th style="width: 10%;">Juzgado</th>
+                            <th style="width: 8%;">Honorarios</th>
+                            <th style="width: 8%;">Total Pagado</th>
+                            <th style="width: 8%;">Saldo</th>
+                            <th style="width: 15%;">Última Actuación</th>
+                            <th style="width: 10%;">Próxima Actuación</th>
+                            <th style="width: 7%;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cliente in clientes %}
+                        <tr data-client-id="{{ cliente.id }}" onclick="selectClient(this)">
+                            <td class="text-center">
+                                <input type="radio" name="selected_client" value="{{ cliente.id }}" class="form-check-input">
+                            </td>
+                            <td class="fw-bold">{{ cliente.nurej }}</td>
+                            <td>{{ cliente.cedula }}</td>
+                            <td class="fw-bold">{{ cliente.nombre }}</td>
+                            <td>{{ cliente.telefono }}</td>
+                            <td>{{ cliente.tipo_proceso }}</td>
+                            <td>{{ cliente.juzgado|truncatechars:30 }}</td>
+                            <td class="text-end">${{ cliente.honorarios_pactados|floatformat:2 }}</td>
+                            <td class="text-end" id="total-pagado-{{ cliente.id }}">${{ cliente.total_pagado|floatformat:2 }}</td>
+                            <td class="text-end {% if cliente.saldo_adeudado > 0 %}saldo-positivo{% else %}saldo-cero{% endif %}" id="saldo-{{ cliente.id }}">
+                                ${{ cliente.saldo_adeudado|floatformat:2 }}
+                            </td>
+                            <td id="actuacion-{{ cliente.id }}">
+                                {% if cliente.ultima_actuacion %}
+                                    <strong>{{ cliente.ultima_actuacion|truncatechars:30 }}</strong><br>
+                                    <small class="text-muted">{{ cliente.fecha_ultima_actuacion|default:"Sin fecha" }}</small>
+                                {% else %}
+                                    <span class="text-muted">Sin actuación</span>
+                                {% endif %}
+                            </td>
+                            <td id="proxima-{{ cliente.id }}">{{ cliente.proxima_actuacion|truncatechars:30|default:"Sin próxima actuación" }}</td>
+                            <td id="estado-{{ cliente.id }}">
+                                <span class="status-badge status-{{ cliente.estado|lower }}">
+                                    {{ cliente.get_estado_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="13" class="text-center text-muted py-4">
+                                <i class="fas fa-users fa-3x mb-3"></i><br>
+                                No hay clientes registrados
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Registrar Pago -->
+    <div class="modal fade" id="pagoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header custom">
+                    <h5 class="modal-title"><i class="fas fa-dollar-sign me-2"></i>Registrar Pago</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="pagoForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Monto</label>
+                            <input type="number" step="0.01" class="form-control" name="monto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Fecha</label>
+                            <input type="date" class="form-control" name="fecha" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success" onclick="submitPago()">Registrar Pago</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Programar Audiencia -->
+    <div class="modal fade" id="audienciaModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header custom">
+                    <h5 class="modal-title"><i class="fas fa-gavel me-2"></i>Programar Audiencia</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="audienciaForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Detalle de la Audiencia</label>
+                            <textarea class="form-control" name="detalle" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Fecha</label>
+                            <input type="date" class="form-control" name="fecha" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Hora</label>
+                            <input type="time" class="form-control" name="hora" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-warning" onclick="submitAudiencia()">Programar Audiencia</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="actuacionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom">
+                <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>Insertar Actuación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="actuacionForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nueva Última Actuación</label>
+                        <textarea class="form-control" name="nueva_ultima_actuacion" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Fecha de la Última Actuación</label>
+                        <input type="date" class="form-control" name="fecha_ultima_actuacion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Próxima Actuación</label>
+                        <textarea class="form-control" name="proxima_actuacion" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-info" onclick="submitActuacion()">Insertar Actuación</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        var selectedClientId = null;
+var selectedClientData = {};
+
+function selectClient(row) {
+    // Remover selección anterior
+    var rows = document.querySelectorAll('tbody tr');
+    for (var i = 0; i < rows.length; i++) {
+        rows[i].classList.remove('selected');
+    }
+    
+    // Seleccionar nueva fila
+    row.classList.add('selected');
+    
+    // Marcar radio button
+    var radio = row.querySelector('input[type="radio"]');
+    radio.checked = true;
+    
+    // Guardar ID del cliente seleccionado
+    selectedClientId = row.getAttribute('data-client-id');
+    
+    // Guardar datos del cliente para editar
+    selectedClientData = {
+        id: selectedClientId,
+        nurej: row.cells[1].textContent.trim(),
+        cedula: row.cells[2].textContent.trim(),
+        nombre: row.cells[3].textContent.trim(),
+        telefono: row.cells[4].textContent.trim(),
+        tipo_proceso: row.cells[5].textContent.trim(),
+        juzgado: row.cells[6].textContent.trim(),
+        honorarios: row.cells[7].textContent.replace('$', '').trim(),
+        pago_inicial: '0'
+    };
+    
+    // Mostrar información del cliente seleccionado
+    var clientName = row.cells[3].textContent;
+    document.getElementById('selectedClientName').textContent = clientName;
+    document.getElementById('selectedClientInfo').style.display = 'block';
+    
+    // Habilitar todos los botones
+    enableActionButtons();
+}
+
+function enableActionButtons() {
+    var buttons = ['btnPago', 'btnAudiencia', 'btnActuacion', 'btnEditar', 'btnEstado', 'btnEliminar', 'btnExportar'];
+    for (var i = 0; i < buttons.length; i++) {
+        var btn = document.getElementById(buttons[i]);
+        if (btn) {
+            btn.disabled = false;
+        }
+    }
+}
+
+function disableActionButtons() {
+    var buttons = ['btnPago', 'btnAudiencia', 'btnActuacion', 'btnEditar', 'btnEstado', 'btnEliminar', 'btnExportar'];
+    for (var i = 0; i < buttons.length; i++) {
+        var btn = document.getElementById(buttons[i]);
+        if (btn) {
+            btn.disabled = true;
+        }
+    }
+    document.getElementById('selectedClientInfo').style.display = 'none';
+}
+
+// Función para cargar datos en modal de editar
+document.getElementById('btnEditar').addEventListener('click', function() {
+    if (selectedClientData.id) {
+        document.getElementById('edit_nurej').value = selectedClientData.nurej;
+        document.getElementById('edit_cedula').value = selectedClientData.cedula;
+        document.getElementById('edit_nombre').value = selectedClientData.nombre;
+        document.getElementById('edit_telefono').value = selectedClientData.telefono;
+        document.getElementById('edit_tipo_proceso').value = selectedClientData.tipo_proceso;
+        document.getElementById('edit_juzgado').value = selectedClientData.juzgado;
+        document.getElementById('edit_honorarios').value = selectedClientData.honorarios;
+        document.getElementById('edit_pago_inicial').value = selectedClientData.pago_inicial;
+    }
+});
+
+function submitEditar() {
+    if (!selectedClientId) {
+        alert('Debe seleccionar un cliente primero');
+        return;
+    }
+
+    var form = document.getElementById('editarForm');
+    var formData = new FormData(form);
+    formData.append('cliente_id', selectedClientId);
+
+    fetch('/editar-datos/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        alert(data.message);
+        if (data.success) {
+            var modal = document.getElementById('editarModal');
+            var bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
+            location.reload();
+        }
+    })
+    .catch(function(error) {
+        alert('Error al editar datos: ' + error);
+    });
+}
+
+function submitEstado() {
+    if (!selectedClientId) {
+        alert('Debe seleccionar un cliente primero');
+        return;
+    }
+
+    var form = document.getElementById('estadoForm');
+    var formData = new FormData(form);
+    formData.append('cliente_id', selectedClientId);
+
+    fetch('/cambiar-estado/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        alert(data.message);
+        if (data.success) {
+            var modal = document.getElementById('estadoModal');
+            var bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
+            location.reload();
+        }
+    })
+    .catch(function(error) {
+        alert('Error al cambiar estado: ' + error);
+    });
+}
+
+function confirmDelete() {
+    if (!selectedClientId) {
+        alert('Debe seleccionar un cliente primero');
+        return;
+    }
+    
+    if (confirm('¿Está seguro de eliminar este cliente? Esta acción no se puede deshacer.')) {
+        var formData = new FormData();
+        formData.append('cliente_id', selectedClientId);
+
+        fetch('/eliminar-cliente/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            alert(data.message);
+            if (data.success) {
+                location.reload();
+            }
+        })
+        .catch(function(error) {
+            alert('Error al eliminar cliente: ' + error);
+        });
+    }
+}
+
+function exportarFicha() {
+    if (!selectedClientId) {
+        alert('Debe seleccionar un cliente primero');
+        return;
+    }
+    window.location.href = '/exportar-ficha/' + selectedClientId + '/';
+}
+
+function submitPago() {
+    if (!selectedClientId) {
+        alert('Debe seleccionar un cliente primero');
+        return;
+    }
+
+    var form = document.getElementById('pagoForm');
+    var formData = new FormData(form);
+    formData.append('cliente_id', selectedClientId);
+
+    fetch('/registrar-pago/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        if (data.success) {
+            alert(data.message);
+            
+            var totalElement = document.getElementById('total-pagado-' + selectedClientId);
+            if (totalElement) {
+                totalElement.textContent = '$' + data.nuevo_total.toFixed(2);
+            }
+            
+            var saldoElement = document.getElementById('saldo-' + selectedClientId);
+            if (saldoElement) {
+                saldoElement.textContent = '$' + data.nuevo_saldo.toFixed(2);
+                
+                if (data.nuevo_saldo > 0) {
+                    saldoElement.className = 'text-end saldo-positivo';
+                } else {
+                    saldoElement.className = 'text-end saldo-cero';
+                }
+            }
+            
+            var modal = document.getElementById('pagoModal');
+            var bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
+            form.reset();
+            
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(function(error) {
+        alert('Error al procesar el pago: ' + error);
+    });
+}
+
+function submitAudiencia() {
+    if (!selectedClientId) {
+        alert('Debe seleccionar un cliente primero');
+        return;
+    }
+
+    var form = document.getElementById('audienciaForm');
+    var formData = new FormData(form);
+    formData.append('cliente_id', selectedClientId);
+
+    fetch('/programar-audiencia/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        alert(data.message);
+        if (data.success) {
+            var modal = document.getElementById('audienciaModal');
+            var bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
+            form.reset();
+        }
+    })
+    .catch(function(error) {
+        alert('Error al programar audiencia: ' + error);
+    });
+}
+
+function submitActuacion() {
+    if (!selectedClientId) {
+        alert('Debe seleccionar un cliente primero');
+        return;
+    }
+
+    var form = document.getElementById('actuacionForm');
+    var formData = new FormData(form);
+    formData.append('cliente_id', selectedClientId);
+
+    fetch('/insertar-actuacion/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        alert(data.message);
+        if (data.success) {
+            var modal = document.getElementById('actuacionModal');
+            var bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
+            form.reset();
+            location.reload();
+        }
+    })
+    .catch(function(error) {
+        alert('Error al insertar actuación: ' + error);
+    });
+}
+
+// Inicializar al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    disableActionButtons();
+    
+    // Agregar evento al botón Estado para abrir modal
+    document.getElementById('btnEstado').addEventListener('click', function() {
+        if (selectedClientId) {
+            var modal = new bootstrap.Modal(document.getElementById('estadoModal'));
+            modal.show();
+        }
+    });
+});
+    </script>
+<!-- Modal Editar Datos -->
+<div class="modal fade" id="editarModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header custom">
+                <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Editar Datos del Cliente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">NUREJ</label>
+                            <input type="text" class="form-control" name="nurej" id="edit_nurej" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Cédula</label>
+                            <input type="text" class="form-control" name="cedula" id="edit_cedula" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nombre Completo</label>
+                        <input type="text" class="form-control" name="nombre" id="edit_nombre" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Teléfono</label>
+                            <input type="text" class="form-control" name="telefono" id="edit_telefono" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Tipo de Proceso</label>
+                            <input type="text" class="form-control" name="tipo_proceso" id="edit_tipo_proceso" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Juzgado</label>
+                        <input type="text" class="form-control" name="juzgado" id="edit_juzgado" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Honorarios Pactados</label>
+                            <input type="number" step="0.01" class="form-control" name="honorarios_pactados" id="edit_honorarios" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Pago Inicial</label>
+                            <input type="number" step="0.01" class="form-control" name="pago_inicial" id="edit_pago_inicial">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="submitEditar()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cambiar Estado -->
+<div class="modal fade" id="estadoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom">
+                <h5 class="modal-title"><i class="fas fa-flag me-2"></i>Cambiar Estado del Cliente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="estadoForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Seleccione el nuevo estado:</label>
+                        <select class="form-select" name="estado" required>
+                            <option value="ACTIVO">Activo</option>
+                            <option value="CONCLUIDO">Concluido</option>
+                            <option value="ABANDONADO">Abandonado</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="submitEstado()">Cambiar Estado</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
