@@ -1,0 +1,34 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+
+# Django
+db.sqlite3
+*.log
+local_settings.py
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+.venv
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos estáticos y media
+staticfiles/
+media/
+
+# Variables de entorno
+.env
